@@ -1,39 +1,39 @@
 import React, { useState ,useEffect,useRef} from 'react';
-const Dropdown = ({options,selected ,onSelectedChange}) => {
+const Dropdown = ({ label,options,selected ,onSelectedChange}) => {
 
 const [open ,setOpen] = useState(false);
 const ref = useRef()
-//only runs once
+  
+
+
 useEffect(() => {
-    document.body.addEventListener("click",(e) => {
+    const onBodyClicked = (e) => {
         if(ref.current.contains(e.target)){
             return
         }     
-        setOpen(0);
-});
-
+        setOpen(0);}
+//manual event 
+    document.body.addEventListener("click",onBodyClicked, { capture: true });
+//cleanup function 
+return ()=>{
+    document.body.removeEventListener('click',onBodyClicked, { capture: true })
+}
   }, []);
 
 
-const renderedOptions = options.map(option =>{
-if (option.value ===selected.value){
-return null;
-}
+  const renderedOptions = options.map(option =>{
+    if (option.value ===selected.value){
+    return null;
+    } 
 return(
-<div  key= {Option.value}
+<div  key= {Option.label}
     className="item"
-    onClick={()=>
-    onSelectedChange(option)}>
-
-{option.label}
-
-</div>
-
-)
+    onClick={()=>onSelectedChange(option)}>{option.label}</div>)
 });
+
 return ( <div   ref={ref} className=" ui form">
 <div className="field">
-<label className="label"> Select Ccolor</label>
+<label className="label"> {label}</label>
 <div onClick ={()=>setOpen(!open)}
 
 className = {`ui selection dropdown  ${open ?'visible active':''}`}>
